@@ -7,12 +7,12 @@ A node based Set-top box that download and manage all your digital media.
 
 Development Environment
 
-- Go to the project folder and execute the command below:
+Go to the project folder and execute the command below:
 
--- ./prepareDevEnvironment.sh
+- ./prepareDevEnvironment.sh
 
 	Installs all the required plugins
 
--- node setup.js
+- node setup.js
 
 	Create the database
