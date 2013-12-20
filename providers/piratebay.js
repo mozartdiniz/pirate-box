@@ -29,7 +29,9 @@ module.exports = {
 				tempDownload.seeds = seeds;
 				tempDownload.peers = peers;
 				tempDownload.magnet = magnet;
-				tempDownload.torrent = "http:" + torrent;
+				if (torrent !== undefined) {
+					tempDownload.torrent = "http:" + torrent;
+				}
 
 				results.push(tempDownload);
 			}
