@@ -1,9 +1,10 @@
 var fs = require ('fs');
-var mm = require('musicmetadata');
+//var mm = require('musicmetadata');
 var lame = require('lame');
 var Speaker = require('speaker');
 
-var readedFiles = {};
+var readedFiles = [];
+var index = 0;
 
 function getFiles (dir) {
     var files = fs.readdirSync (dir);
@@ -16,34 +17,30 @@ function getFiles (dir) {
             getFiles (name);
         } else {
 
-            var parser = new mm(fs.createReadStream(dir + '/' + files));
-
-            parser.on('metadata', (function (readedFiles, dir, file) {
-                return function (result) {
-
-                    readedFiles[result.title] = {
-                        meta: result,
-                        path: dir + '/' + file
-                    };
-
-                    console.log (result);
-
-                }
-            }(readedFiles, dir, files[i])));
+            readedFiles.push({
+                name: files[i],
+                path: dir + '/' + files[i]
+            });
 
         }
     }
 }
 
-getFiles ('/media/DarkFlashCard_/musics');
-//
-//var choosedFile = readedFiles[process.argv[2]];
-//
+getFiles ('/media/DarkFlashCard/musics');
+
 console.log (readedFiles);
-//
-//
-//fs.createReadStream(choosedFile)
-//    .pipe(new lame.Decoder())
-//    .on('format', function (format) {
-//        this.pipe(new Speaker(format));
-//    });
+
+function play () {
+
+    var stream = fs.createReadStream(readedFiles[index].path);
+    var speaker = new Speaker ();
+    speaker.on ('finish', play);
+    stream.pipe(new lame.Decoder()).pipe(speaker);
+
+    console.log ('playing: ' + readedFiles[index].name)
+
+    index += 1;
+
+}
+
+play ();
