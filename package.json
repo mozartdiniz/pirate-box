@@ -1,0 +1,9 @@
+{
+    "name": "Pirate-Box",
+    "version": "0.0.1",
+    "description": "The ultimate open source set-top box solution",
+    "dependencies": {
+        "socket.io": "latest",
+        "express": "latest"
+    }
+}
