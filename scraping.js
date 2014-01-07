@@ -66,7 +66,7 @@ App.Torrent.Search = function(searchTerms, contains, doNotContains, callbackFunc
 
 App.Torrent.FindBestMatch = function(mediaOptions) {
 
-	console.log("Finding best match for " + mediaOptions);
+	console.log("Finding best match for " + JSON.stringify(mediaOptions, null, 4));
 
 	if (mediaOptions === undefined) {
 		console.log("undefined options!");
