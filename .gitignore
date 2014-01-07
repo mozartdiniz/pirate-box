@@ -2,3 +2,4 @@ node_modules/**
 pirate-box.iml
 npm-debug.log
 .idea/**
+database.sqlite

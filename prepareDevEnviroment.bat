@@ -1,1 +1,0 @@
-npm install cheerio express request sqlite3
