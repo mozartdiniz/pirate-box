@@ -1,10 +1,15 @@
 var request = require('request');
 var cheerio = require('cheerio');
 var provider = require('./providers/piratebay');
+var DEBUG = false;
 
 var pirateBayUrl = "http://thepiratebay.org";
 var App = App || {};
 App.Torrent = App.Torrent || {};
+
+var stringContains = function(string, substring) {
+	return (string.indexOf(substring) !== -1);
+};
 
 App.Torrent.Search = function(searchTerms, contains, doNotContains, callbackFunction) {
 	if (searchTerms === 'undefined') {
@@ -36,6 +41,8 @@ App.Torrent.Search = function(searchTerms, contains, doNotContains, callbackFunc
 	    }
 	};
 
+	DEBUG && console.log("Doing the scraping...");
+
 	request(requestOptions, function(err, resp, body) {
 		if (err) {
 			throw err;
@@ -46,6 +53,7 @@ App.Torrent.Search = function(searchTerms, contains, doNotContains, callbackFunc
 
 			var results = provider.parseResult(body);
 
+			DEBUG && console.log("Calling callbackFunction...");
 			callbackFunction(results);
 
 		} else {
@@ -56,16 +64,83 @@ App.Torrent.Search = function(searchTerms, contains, doNotContains, callbackFunc
 
 };
 
+App.Torrent.FindBestMatch = function(mediaOptions) {
+
+	console.log("Finding best match for " + mediaOptions);
+
+	if (mediaOptions === undefined) {
+		console.log("undefined options!");
+		return;
+	}
+
+	var callbackFunction = function(resultArray) {
+
+		// TODO: Create a score search
+
+		console.log("Results found: " + resultArray.length);
+
+		var chosenItem;
+
+		var length = resultArray.length;
+		for (var w = 0; w < length; w++) {
+			var item = resultArray[w];
+
+			DEBUG && console.log("Analysing item: " + JSON.stringify(item, null, 4));
+
+			var itemContainsAll = true;
+			var itemDoNotContainsAll = true;
+			for (var j = mediaOptions.contains.length - 1; j >= 0; j--) {
+				if (!stringContains(item.name, mediaOptions.contains[j])) {
+					itemContainsAll = false;
+				}
+			};
+			for (var k = mediaOptions.doNotContain.length - 1; k >= 0; k--) {
+				if (stringContains(item.name, mediaOptions.contains[k])) {
+					itemDoNotContainsAll = false;
+				}
+			};
+
+			if (itemContainsAll === true && itemDoNotContainsAll === true) {
+				chosenItem = item;
+				break;
+			}
+		}
+
+		console.log("Chosen Item: " + JSON.stringify(chosenItem, null, 4));
+
+	};
+
+	App.Torrent.Search(mediaOptions.terms, null, null, callbackFunction);
+
+
+};
+
 // Test!
 
-console.log("Requesting...");
+var mediaOptions = {};
 
 var terms = new Array();
 terms[0] = "Arrow";
 terms[1] = "S01E03";
 
-var callbackFunctionWithTheResults = function(resultsArray){
-	console.log(resultsArray);
+var contains = new Array();
+contains[0] = "720p";
+
+mediaOptions.terms = terms;
+mediaOptions.contains = contains;
+
+mediaOptions.doNotContain = new Array();
+
+var callbackFunctionWithBestMatch = function(result) {
+	console.log(result);
 };
 
-App.Torrent.Search(terms, null, null, callbackFunctionWithTheResults);
+console.log("Requesting...");
+App.Torrent.FindBestMatch(mediaOptions);
+
+
+// var callbackFunctionWithTheResults = function(resultsArray){
+// 	console.log(resultsArray);
+// };
+
+// App.Torrent.Search(terms, null, null, callbackFunctionWithTheResults);
