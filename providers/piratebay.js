@@ -1,5 +1,9 @@
 var cheerio = require('cheerio');
 
+var stringEndsWith = function(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+};
+
 module.exports = {
 	parseResult : function(page) {
 		var results = new Array();
@@ -29,7 +33,7 @@ module.exports = {
 				tempDownload.seeds = seeds;
 				tempDownload.peers = peers;
 				tempDownload.magnet = magnet;
-				if (torrent !== undefined) {
+				if (torrent !== undefined && stringEndsWith(torrent, ".torrent")) {
 					tempDownload.torrent = "http:" + torrent;
 				}
 

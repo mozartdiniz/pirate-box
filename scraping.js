@@ -3,9 +3,7 @@ var cheerio = require('cheerio');
 var provider = require('./providers/piratebay');
 
 var pirateBayUrl = "http://thepiratebay.org";
-
 var App = App || {};
-
 App.Torrent = App.Torrent || {};
 
 App.Torrent.Search = function(searchTerms, contains, doNotContains, callbackFunction) {
@@ -64,7 +62,7 @@ console.log("Requesting...");
 
 var terms = new Array();
 terms[0] = "Arrow";
-terms[1] = "S01E05";
+terms[1] = "S01E03";
 
 var callbackFunctionWithTheResults = function(resultsArray){
 	console.log(resultsArray);
