@@ -32,6 +32,8 @@
         "url": "https://github.com/mozartdiniz/pirate-box/issues"
     },
     "contributors": [
-        "name":"Fernando Nogueira"
+        {
+            "name": "Fernando Nogueira"
+        }
     ]
 }
