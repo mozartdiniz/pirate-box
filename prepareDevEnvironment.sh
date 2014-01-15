@@ -1,1 +1,1 @@
-npm install cheerio express request sqlite3
+npm install cheerio express request sqlite3 socket.is ejs
