@@ -5,13 +5,13 @@ var DEBUG = false;
 
 var pirateBayUrl = "http://thepiratebay.org";
 var App = App || {};
-App.Torrent = App.Torrent || {};
+App.TorrentFinder = App.TorrentFinder || {};
 
 var stringContains = function(string, substring) {
 	return (string.indexOf(substring) !== -1);
 };
 
-App.Torrent.Search = function(searchTerms, contains, doNotContains, callbackFunction) {
+App.TorrentFinder.Search = function(searchTerms, contains, doNotContains, callbackFunction) {
 	if (searchTerms === 'undefined') {
 		console.log("Invalid searchTerms!");
 		return;
@@ -64,7 +64,7 @@ App.Torrent.Search = function(searchTerms, contains, doNotContains, callbackFunc
 
 };
 
-App.Torrent.FindBestMatch = function(mediaOptions) {
+App.TorrentFinder.FindBestMatch = function(mediaOptions) {
 
 	console.log("Finding best match for " + JSON.stringify(mediaOptions, null, 4));
 
@@ -110,37 +110,9 @@ App.Torrent.FindBestMatch = function(mediaOptions) {
 
 	};
 
-	App.Torrent.Search(mediaOptions.terms, null, null, callbackFunction);
+	App.TorrentFinder.Search(mediaOptions.terms, null, null, callbackFunction);
 
 
 };
 
-// Test!
-
-var mediaOptions = {};
-
-var terms = new Array();
-terms[0] = "Arrow";
-terms[1] = "S01E03";
-
-var contains = new Array();
-contains[0] = "720p";
-
-mediaOptions.terms = terms;
-mediaOptions.contains = contains;
-
-mediaOptions.doNotContain = new Array();
-
-var callbackFunctionWithBestMatch = function(result) {
-	console.log(result);
-};
-
-console.log("Requesting...");
-App.Torrent.FindBestMatch(mediaOptions);
-
-
-// var callbackFunctionWithTheResults = function(resultsArray){
-// 	console.log(resultsArray);
-// };
-
-// App.Torrent.Search(terms, null, null, callbackFunctionWithTheResults);
+module.exports = App.TorrentFinder;
