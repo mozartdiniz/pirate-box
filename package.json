@@ -35,5 +35,9 @@
         {
             "name": "Fernando Nogueira"
         }
-    ]
+    ],
+    "preferGlobal": "true",
+    "bin": {
+   	 "pirate" : "command-line/pirate.js"
+    }
 }

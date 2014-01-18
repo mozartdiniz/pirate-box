@@ -64,7 +64,7 @@ App.TorrentFinder.Search = function(searchTerms, contains, doNotContains, callba
 
 };
 
-App.TorrentFinder.FindBestMatch = function(mediaOptions) {
+App.TorrentFinder.FindBestMatch = function(mediaOptions, callback) {
 
 	console.log("Finding best match for " + JSON.stringify(mediaOptions, null, 4));
 
@@ -107,6 +107,7 @@ App.TorrentFinder.FindBestMatch = function(mediaOptions) {
 		}
 
 		console.log("Chosen Item: " + JSON.stringify(chosenItem, null, 4));
+		callback(chosenItem);
 
 	};
 
