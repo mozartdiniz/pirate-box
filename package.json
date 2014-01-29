@@ -1,43 +1,44 @@
 {
-    "name": "Pirate-Box",
-    "version": "0.0.1",
-    "description": "The ultimate open source set-top box solution",
-    "dependencies": {
-        "socket.io": "latest",
-        "express": "latest",
-        "cheerio": "~0.12.4",
-        "request": "~2.30.0",
-        "sqlite3": "~2.1.19"
-    },
-    "devDependencies": {
-        "grunt-cli": "~0.1.11",
-        "grunt": "~0.4.2",
-        "grunt-ssh": "~0.9.1"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/mozartdiniz/pirate-box.git"
-    },
-    "keywords": [
-        "torrent",
-        "media",
-        "pirate-bay"
-    ],
-    "author": "mozartdiniz",
-    "license": "BSD",
-    "bugs": {
-        "url": "https://github.com/mozartdiniz/pirate-box/issues"
-    },
-    "contributors": [
-        {
-            "name": "Fernando Nogueira"
-        }
-    ],
-    "preferGlobal": "true",
-    "bin": {
-   	 "pirate" : "command-line/pirate.js"
+  "name": "Pirate-Box",
+  "version": "0.0.1",
+  "description": "The ultimate open source set-top box solution",
+  "dependencies": {
+    "socket.io": "latest",
+    "express": "latest",
+    "cheerio": "~0.12.4",
+    "request": "~2.30.0",
+    "sqlite3": "~2.1.19",
+    "nedb": "~0.10.0"
+  },
+  "devDependencies": {
+    "grunt-cli": "~0.1.11",
+    "grunt": "~0.4.2",
+    "grunt-ssh": "~0.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mozartdiniz/pirate-box.git"
+  },
+  "keywords": [
+    "torrent",
+    "media",
+    "pirate-bay"
+  ],
+  "author": "mozartdiniz",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/mozartdiniz/pirate-box/issues"
+  },
+  "contributors": [
+    {
+      "name": "Fernando Nogueira"
     }
+  ],
+  "preferGlobal": "true",
+  "bin": {
+    "pirate": "command-line/pirate.js"
+  }
 }
