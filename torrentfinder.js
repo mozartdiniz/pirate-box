@@ -89,16 +89,20 @@ App.TorrentFinder.FindBestMatch = function(mediaOptions, callback) {
 
 			var itemContainsAll = true;
 			var itemDoNotContainsAll = true;
-			for (var j = mediaOptions.contains.length - 1; j >= 0; j--) {
-				if (!stringContains(item.name, mediaOptions.contains[j])) {
-					itemContainsAll = false;
+			if (mediaOptions.contains !== undefined) {
+				for (var j = mediaOptions.contains.length - 1; j >= 0; j--) {
+					if (!stringContains(item.name, mediaOptions.contains[j])) {
+						itemContainsAll = false;
+					}
 				}
-			};
-			for (var k = mediaOptions.doNotContain.length - 1; k >= 0; k--) {
-				if (stringContains(item.name, mediaOptions.contains[k])) {
-					itemDoNotContainsAll = false;
+			}
+			if (mediaOptions.doNotContain !== undefined) {
+				for (var k = mediaOptions.doNotContain.length - 1; k >= 0; k--) {
+					if (stringContains(item.name, mediaOptions.doNotContain[k])) {
+						itemDoNotContainsAll = false;
+					}
 				}
-			};
+			}
 
 			if (itemContainsAll === true && itemDoNotContainsAll === true) {
 				chosenItem = item;

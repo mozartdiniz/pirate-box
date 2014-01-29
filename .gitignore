@@ -3,3 +3,5 @@ pirate-box.iml
 npm-debug.log
 .idea/**
 database.sqlite
+
+db/

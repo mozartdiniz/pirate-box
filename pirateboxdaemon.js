@@ -1,40 +1,34 @@
-var sqlite3 = require('sqlite3').verbose();
-var db;
-// var db = new sqlite3.Database('database.sqlite');
+var Datastore = require('nedb');
+var finder = require("./torrentfinder");
 
-// db.serialize(function() {
-// 	db.each("SELECT * FROM configuration", function(err, row) {
-// 		console.log(JSON.stringify(row, null, 4));
-// 	});
-// });
-
-// db.close();
+var db = {};
+db.config = new Datastore({ filename: 'db/configuration.pbox', autoload: true });
+db.subscription = new Datastore({ filename: 'db/subscription.pbox', autoload: true });
+db.download = new Datastore({ filename: 'db/download.pbox', autoload: true });
 
 var prepareTerms = function() {
 
 };
 
 var update = function(){
-	console.log("Updating...");
-	db = new sqlite3.Database('database.sqlite');
+	db.subscription.find({}, function(err, docs){
+  		docs.forEach(function(entry) {
 
-	db.serialize(function() {
-		db.each("SELECT * FROM subscription", function(err, row) {
-			console.log("err: " + err);
-			console.log(JSON.stringify(row, null, 4));
-			console.log("Updated.");
-		}, function(error, rowQuantity) {
-			if (error !== null) {
-				console.log("Error: " + JSON.stringify(error, null, 4));
-			} else {
-				console.log(rowQuantity + " series verified.");
-			}
-		});
+  			var mediaOptions = {};
+  			mediaOptions.terms = new Array();
+
+  			entry.options.forEach(function(option){
+  				mediaOptions.terms.push(option.value);
+  			});
+
+  			var callbackFunctionWithBestMatch = function(chosenItem) {
+				console.log("Chosen Item: " + JSON.stringify(chosenItem, null, 4));
+			};
+    		finder.FindBestMatch(mediaOptions, callbackFunctionWithBestMatch);
+  		});
 	});
-
-	db.close();
 };
 
 var interval = setInterval(function(){
 	update();
-}, 5000);
+}, 15000);

@@ -1,4 +1,4 @@
-var finder = require("./torrentfinder");
+var finder = require("./../torrentfinder");
 
 var mediaOptions = {};
 
