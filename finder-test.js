@@ -14,12 +14,12 @@ mediaOptions.contains = contains;
 
 mediaOptions.doNotContain = new Array();
 
-var callbackFunctionWithBestMatch = function(result) {
-	console.log(result);
+var callbackFunctionWithBestMatch = function(chosenItem) {
+	console.log(" -- :) -- Chosen Item: " + JSON.stringify(chosenItem, null, 4));
 };
 
 console.log("Requesting...");
-finder.FindBestMatch(mediaOptions);
+finder.FindBestMatch(mediaOptions, callbackFunctionWithBestMatch);
 
 
 // var callbackFunctionWithTheResults = function(resultsArray){

@@ -14,16 +14,41 @@ db.serialize(function() {
 
   console.log("Creating subscriptionoption table...");
   //id, subscriptionid, value, type (e.g. 1, 1, arrow, TERM) (types: TERM, CONTAINS, NOT_CONTAINS)
-  db.run("CREATE TABLE IF NOT EXISTS subscriptionoption (id INTEGER PRIMARY KEY,	subscriptionid INTEGER,	value TEXT, type TEXT, FOREIGN KEY(subscriptionid) REFERENCES subscription(id))");
+  db.run("CREATE TABLE IF NOT EXISTS subscriptionoption (id INTEGER PRIMARY KEY, subscriptionid INTEGER,	value TEXT, type TEXT, FOREIGN KEY(subscriptionid) REFERENCES subscription(id))");
 
 
   console.log("Creating downloadedepisode table...");
   db.run("CREATE TABLE IF NOT EXISTS downloadedepisode (id INTEGER PRIMARY KEY, subscriptionid INTEGER, name TEXT, season TEXT, episode TEXT, date TEXT)");
 
   console.log("Inserting default values...");
-  var stmt = db.prepare("INSERT INTO configuration VALUES(?, ?)");
-  stmt.run(1,'S%SEASON%E%EPISODE%');
-  stmt.finalize();
+  db.run("INSERT INTO configuration VALUES(1, 'S%SEASON%E%EPISODE%')");
+
+  console.log("Inserting sample data...");
+  var lastID;
+  db.run("INSERT INTO subscription (description) VALUES('Arrow - Seriado do Flecha la')",
+    function(err) {
+      if (!err) {
+        console.log(this);
+        lastID = this.lastID;
+      } else {
+        console.log("1Error inserting sample data. Err: " + err);
+      }    
+    }
+  );
+
+  db.run("INSERT INTO subscriptionoption (subscriptionid,value,type) VALUES($subscriptionid,$value,$type)",
+    {$id:lastID,$value:'arrow',$type:'TERM'},
+    function(err2){
+    if (!err2) {
+      console.log("Sample data inserted");
+    } else {
+      console.log("2Error inserting sample data. Err: " + err2);
+    }
+  });
+
+  // stmt = db.prepare("INSERT INTO subscriptionoption (description) VALUES(?)");
+  // stmt.run();
+
 });
 
 db.close();
