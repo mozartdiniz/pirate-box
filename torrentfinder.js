@@ -115,7 +115,7 @@ App.TorrentFinder.FindBestMatch = function(mediaOptions, callback) {
 
 	};
 
-	App.TorrentFinder.Search(mediaOptions.terms, null, null, callbackFunction);
+	App.TorrentFinder.Search(mediaOptions.terms, callbackFunction);
 
 
 };
