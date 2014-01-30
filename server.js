@@ -52,7 +52,7 @@ io.sockets.on('connection', function (socket) {
         socket.emit ('searchReturn', result);
     };
 
-    finder.Search(terms, null, null, callbackFunctionWithBestMatch);    
+    finder.Search(terms, callbackFunctionWithBestMatch);    
 
   })
 

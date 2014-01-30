@@ -11,7 +11,7 @@ var stringContains = function(string, substring) {
 	return (string.indexOf(substring) !== -1);
 };
 
-App.TorrentFinder.Search = function(searchTerms, contains, doNotContains, callbackFunction) {
+App.TorrentFinder.Search = function(searchTerms, callbackFunction) {
 	if (searchTerms === 'undefined') {
 		console.log("Invalid searchTerms!");
 		return;
