@@ -1,7 +1,7 @@
 var Datastore = require('nedb');
 var finder = require("./torrentfinder");
 
-var DEBUG = false;
+var DEBUG = true;
 
 var db = {};
 db.config = new Datastore({
@@ -25,10 +25,33 @@ var loadDatabases = function() {
   db.download.loadDatabase();
 };
 
+var stringContains = function(string, substring) {
+  return (string.indexOf(substring) !== -1);
+};
+
+var generateEpisodeTerm = function(season, episode) {
+  var term = "S";
+  if (season < 10) {
+    term += "0" + season;
+  } else {
+    term += season;
+  }
+  term += "E";
+  if (episode < 10) {
+    term += "0" + episode
+  } else {
+    term += episode;
+  }
+
+  return term;
+};
+
 var update = function() {
   loadDatabases();
   db.subscription.find({}, function(err, docs) {
     docs.forEach(function(entry) {
+
+      console.log("Verifying new downloads for subscription: " + JSON.stringify(entry, null, 4));
 
       var mediaOptions = {};
       mediaOptions.terms = new Array();
@@ -37,8 +60,42 @@ var update = function() {
         mediaOptions.terms.push(option.value);
       });
 
+      var lastSeason;
+      if (entry.lastSeason === undefined) {
+        lastSeason = 1;
+      } else {
+        lastSeason = entry.lastSeason;
+      }
+
+      if (entry.lastEpisode === undefined) {
+        lastEpisode = 1;
+      } else {
+        lastEpisode = entry.lastEpisode;
+      }
+
+      var episodeTerm = generateEpisodeTerm(lastSeason, lastEpisode + 1);
+
+      mediaOptions.terms.push(episodeTerm);
+
       var callbackFunctionWithBestMatch = function(chosenItem) {
         console.log("Chosen Item: " + JSON.stringify(chosenItem, null, 4));
+
+        if (stringContains(chosenItem.name, episodeTerm)) {
+
+          //Download here
+
+          // If download started successfully... Updating downloaded epi
+          entry.lastEpisode = lastEpisode + 1;
+          entry.lastSeason = lastSeason;
+
+          DEBUG && console.log("Updating subscription [id: " + entry._id + ", description: " + entry.description + "] with : lastSeason: " + lastSeason + "; lastEpisode: " + (lastEpisode + 1));
+          db.subscription.update({
+            _id: entry._id
+          }, entry, {}, function(err, numReplaced) {
+              DEBUG && console.log("Update successful. " + numReplaced + " documents were updated.");
+          });
+        }
+
       };
       finder.FindBestMatch(mediaOptions, callbackFunctionWithBestMatch);
     });
@@ -72,6 +129,8 @@ var getEspisodeRegexPattern = function() {
   // This is how we may get the episodeRegexPattern.
 };
 
+update();
+
 var interval = setInterval(function() {
   update();
-}, 10000);
+}, 30000);
