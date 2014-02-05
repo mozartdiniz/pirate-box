@@ -1,7 +1,9 @@
 var request = require('request');
 var cheerio = require('cheerio');
 var provider = require('./providers/piratebay');
-var DEBUG = false;
+var Datastore = require('nedb');
+
+var DEBUG = true;
 
 var pirateBayUrl = "http://thepiratebay.org";
 var App = App || {};
@@ -18,16 +20,16 @@ App.TorrentFinder.Search = function(searchTerms, callbackFunction) {
 	}
 
 	var requestUrl = pirateBayUrl + "/search/",
-	first = true;
+		first = true;
 
-	searchTerms.forEach(function(entry){
+	searchTerms.forEach(function(entry) {
 		if (first) {
 			requestUrl += entry;
 			first = false;
 		} else {
 			requestUrl += "%20" + entry;
 		}
-		
+
 	});
 
 	requestUrl += "/0/7/0";
@@ -35,10 +37,10 @@ App.TorrentFinder.Search = function(searchTerms, callbackFunction) {
 	console.log("Requesting for: " + requestUrl);
 
 	var requestOptions = {
-	    url: requestUrl,
-	    headers: {
-	        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36'
-	    }
+		url: requestUrl,
+		headers: {
+			'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36'
+		}
 	};
 
 	DEBUG && console.log("Doing the scraping...");
@@ -59,7 +61,7 @@ App.TorrentFinder.Search = function(searchTerms, callbackFunction) {
 		} else {
 			console.log("Something wrong happened... :(");
 		}
-		
+
 	});
 
 };
@@ -110,14 +112,31 @@ App.TorrentFinder.FindBestMatch = function(mediaOptions, callback) {
 			}
 		}
 
-		console.log("Chosen Item: " + JSON.stringify(chosenItem, null, 4));
+		DEBUG && console.log("Chosen Item: " + JSON.stringify(chosenItem, null, 4));
 		callback(chosenItem);
 
 	};
 
 	App.TorrentFinder.Search(mediaOptions.terms, callbackFunction);
 
+};
 
+App.TorrentFinder.IdentifyTerms = function(string, episodeRegexPattern) {
+	episodeRegexPattern = "S\\d+E\\d+(\\z|$)";
+	DEBUG && console.log("Identifying terms for: " + string + " regex pattern: " + episodeRegexPattern);
+	if (string !== undefined) {
+		var array = string.split(".");
+		var terms = new Array();
+		array.forEach(function(entry) {
+			if (!entry.match(episodeRegexPattern)) {
+				terms.push(entry);
+			}
+		});
+		return terms;
+	} else {
+		DEBUG && console.log("String was undefined");
+		return null;
+	}
 };
 
 module.exports = App.TorrentFinder;
