@@ -27,35 +27,35 @@ app.get('/', function(req, res) {
     });
 });
 
-io.sockets.on('connection', function (socket) {
-
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-
-  socket.on('search', function (data) {
-
-    var mediaOptions = {};
-
-    var terms = data.terms.split(' ');
-
-    var contains = new Array();
-    contains[0] = "720p";
-
-    mediaOptions.terms = terms;
-    mediaOptions.contains = contains;
-
-    mediaOptions.doNotContain = new Array();
-
-    var callbackFunctionWithBestMatch = function(result) {
-        socket.emit ('searchReturn', result);
-    };
-
-    finder.Search(terms, callbackFunctionWithBestMatch);    
-
-  })
-
-});
+//io.sockets.on('connection', function (socket) {
+//
+//  socket.emit('news', { hello: 'world' });
+//  socket.on('my other event', function (data) {
+//    console.log(data);
+//  });
+//
+//  socket.on('search', function (data) {
+//
+//    var mediaOptions = {};
+//
+//    var terms = data.terms.split(' ');
+//
+//    var contains = new Array();
+//    contains[0] = "720p";
+//
+//    mediaOptions.terms = terms;
+//    mediaOptions.contains = contains;
+//
+//    mediaOptions.doNotContain = new Array();
+//
+//    var callbackFunctionWithBestMatch = function(result) {
+//        socket.emit ('searchReturn', result);
+//    };
+//
+//    finder.Search(terms, callbackFunctionWithBestMatch);
+//
+//  })
+//
+//});
 
 console.log("Express server listening on port 3000");
